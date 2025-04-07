@@ -51,11 +51,10 @@ async def async_setup_entry(
 class RemootioCover(cover.CoverEntity):
     """Cover entity which represents an Remootio device controlled garage door or gate."""
 
-    _attr_name = None
     _remootio_client: RemootioClient
     _attr_has_entity_name = True
     _attr_should_poll = False
-    _attr_supported_features = cover.SUPPORT_OPEN | cover.SUPPORT_CLOSE
+    _attr_supported_features = cover.CoverEntityFeature.OPEN | cover.CoverEntityFeature.CLOSE
     def __init__(
         self,
         unique_id: str,
@@ -71,7 +70,9 @@ class RemootioCover(cover.CoverEntity):
         self._attr_device_info = DeviceInfo(
             name=name,
             manufacturer="Assemblabs Ltd",
-            identifiers={(DOMAIN, self._attr_unique_id)},
+            identifiers={
+                (cover.DOMAIN, self.unique_id)
+            },
         )
 
     async def async_added_to_hass(self) -> None:
